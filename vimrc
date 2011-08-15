@@ -46,7 +46,6 @@ set visualbell t_vb=
 "try to make possible to navigate within lines of wrapped lines
 nmap <Down> gj
 nmap <Up> gk
-set fo=l
 
 "statusline setup
 set statusline=%f       "tail of the filename
