@@ -410,3 +410,6 @@ vmap <D-[> <gv
 vmap <D-]> >gv
 
 let ScreenShot = {'Icon':0, 'Credits':0, 'force_background':'#FFFFFF'}
+
+"Misc key mappings
+nmap <BS> :nohlsearch<CR>
