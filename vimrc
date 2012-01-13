@@ -264,7 +264,7 @@ if has("gui_running")
     if has("gui_gnome")
         set term=gnome-256color
         colorscheme xoria256
-        set guifont=Consolas\ 11
+        set guifont=Consolas\ for\ Powerline\ 11
     endif
 
     if has("gui_mac") || has("gui_macvim")
@@ -413,3 +413,6 @@ let ScreenShot = {'Icon':0, 'Credits':0, 'force_background':'#FFFFFF'}
 
 "Misc key mappings
 nmap <BS> :nohlsearch<CR>
+
+"Powerline plugin
+let g:Powerline_symbols = 'fancy'

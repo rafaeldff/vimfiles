@@ -125,3 +125,6 @@
 [submodule "bundle/fsharp"]
 	path = bundle/fsharp
 	url = git@github.com:DrTom/fsharp-vim.git
+[submodule "bundle/vim-powerline"]
+	path = bundle/vim-powerline
+	url = https://github.com/Lokaltog/vim-powerline.git
