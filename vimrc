@@ -14,6 +14,11 @@ set backspace=indent,eol,start
 "store lots of :cmdline history
 set history=1000
 
+"set timeout for a snappier Command-T
+set timeout
+set ttimeout
+set timeoutlen=100
+
 set showcmd     "show incomplete cmds down the bottom
 set showmode    "show current mode down the bottom
 
@@ -420,3 +425,5 @@ nmap <BS> :nohlsearch<CR>
 
 "Powerline plugin
 let g:Powerline_symbols = 'fancy'
+
+
