@@ -5,3 +5,7 @@ tags
 .VimballRecord
 .netrwhist
 bundle/vim-peepopen
+bundle/abolish
+bundle/clojure
+bundle/liftweb
+bundle/vim-textobj-user
