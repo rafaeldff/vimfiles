@@ -9,3 +9,5 @@ bundle/abolish
 bundle/clojure
 bundle/liftweb
 bundle/vim-textobj-user
+*.swp
+bundle/Command-T/bin/*
