@@ -60,8 +60,8 @@
   ignore = dirty
 [submodule "bundle/Command-T"]
 	path = bundle/Command-T
-	url = git://github.com/akitaonrails/Command-T.git
-  ignore = dirty
+	url = https://rafaeldff@github.com/rafaeldff/Command-T.git
+        ignore = dirty
 [submodule "bundle/textile"]
 	path = bundle/textile
 	url = git://github.com/timcharper/textile.vim.git
