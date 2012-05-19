@@ -1,130 +1,140 @@
 [submodule "snippets"]
+	ignore = untracked
 	path = snippets
 	url = git@github.com:rafaeldff/snipmate-snippets.git
-  ignore = dirty
 [submodule "bundle/rails"]
+	ignore = untracked
 	path = bundle/rails
 	url = git://github.com/tpope/vim-rails.git
-  ignore = dirty
 [submodule "bundle/cucumber"]
+	ignore = untracked
 	path = bundle/cucumber
 	url = git://github.com/tpope/vim-cucumber.git
-  ignore = dirty
 [submodule "bundle/haml"]
+	ignore = untracked
 	path = bundle/haml
 	url = git://github.com/tpope/vim-haml.git
-  ignore = dirty
 [submodule "bundle/surround"]
+	ignore = untracked
 	path = bundle/surround
 	url = git://github.com/tpope/vim-surround.git
-  ignore = dirty
 [submodule "bundle/NERD_tree"]
+	ignore = untracked
 	path = bundle/NERD_tree
 	url = git://github.com/scrooloose/nerdtree.git
-  ignore = dirty
 [submodule "bundle/NERD_commenter"]
+	ignore = untracked
 	path = bundle/NERD_commenter
 	url = git://github.com/scrooloose/nerdcommenter.git
-  ignore = dirty
 [submodule "bundle/ragtag"]
+	ignore = untracked
 	path = bundle/ragtag
 	url = git://github.com/tpope/vim-ragtag.git
-  ignore = dirty
 [submodule "bundle/fugitive"]
+	ignore = untracked
 	path = bundle/fugitive
 	url = git://github.com/tpope/vim-fugitive.git
-  ignore = dirty
 [submodule "bundle/markdown"]
+	ignore = untracked
 	path = bundle/markdown
 	url = git://github.com/tpope/vim-markdown.git
-  ignore = dirty
 [submodule "bundle/vividchalk"]
+	ignore = untracked
 	path = bundle/vividchalk
 	url = git://github.com/tpope/vim-vividchalk.git
-  ignore = dirty
 [submodule "bundle/git"]
+	ignore = untracked
 	path = bundle/git
 	url = git://github.com/tpope/vim-git.git
-  ignore = dirty
 [submodule "bundle/endwise"]
+	ignore = untracked
 	path = bundle/endwise
 	url = git://github.com/tpope/vim-endwise.git
-  ignore = dirty
 [submodule "bundle/snipmate"]
+	ignore = untracked
 	path = bundle/snipmate
 	url = git://github.com/akitaonrails/snipmate.vim.git
-  ignore = dirty
 [submodule "bundle/syntastic"]
+	ignore = untracked
 	path = bundle/syntastic
 	url = git://github.com/scrooloose/syntastic.git
-  ignore = dirty
 [submodule "bundle/Command-T"]
+	ignore = untracked
 	path = bundle/Command-T
 	url = https://rafaeldff@github.com/rafaeldff/Command-T.git
-        ignore = dirty
 [submodule "bundle/textile"]
+	ignore = untracked
 	path = bundle/textile
 	url = git://github.com/timcharper/textile.vim.git
-  ignore = dirty
 [submodule "bundle/vim-ruby"]
+	ignore = untracked
 	path = bundle/vim-ruby
 	url = git://github.com/vim-ruby/vim-ruby.git
-  ignore = dirty
 [submodule "bundle/unimpaired"]
+	ignore = untracked
 	path = bundle/unimpaired
 	url = git://github.com/tpope/vim-unimpaired.git
-  ignore = dirty
 [submodule "bundle/scss-syntax"]
+	ignore = untracked
 	path = bundle/scss-syntax
 	url = http://github.com/cakebaker/scss-syntax.vim.git
-  ignore = dirty
 [submodule "bundle/ack"]
+	ignore = untracked
 	path = bundle/ack
 	url = git://github.com/mileszs/ack.vim.git
-  ignore = dirty
 [submodule "bundle/vim-coffee-script"]
+	ignore = untracked
 	path = bundle/vim-coffee-script
 	url = git://github.com/kchmck/vim-coffee-script.git
-  ignore = dirty
 [submodule "bundle/supertab"]
+	ignore = untracked
 	path = bundle/supertab
 	url = git://github.com/ervandew/supertab.git
-  ignore = dirty
 [submodule "bundle/vim-ruby-sinatra"]
+	ignore = untracked
 	path = bundle/vim-ruby-sinatra
 	url = git://github.com/hallison/vim-ruby-sinatra.git
-  ignore = dirty
 [submodule "bundle/securemodelines"]
+	ignore = untracked
 	path = bundle/securemodelines
 	url = git://github.com/ciaranm/securemodelines.git
-  ignore = dirty
 [submodule "bundle/vim-textobj-user"]
+	ignore = untracked
 	path = bundle/vim-textobj-user
 	url = git://github.com/kana/vim-textobj-user.git
 [submodule "bundle/vim-textobj-rubybloc"]
+	ignore = untracked
 	path = bundle/vim-textobj-rubybloc
 	url = git://github.com/nelstrom/vim-textobj-rubyblock.git
 [submodule "bundle/vim-preview"]
+	ignore = untracked
 	path = bundle/vim-preview
 	url = git://github.com/greyblake/vim-preview.git
 [submodule "bundle/abolish"]
+	ignore = untracked
 	path = bundle/abolish
 	url = git://github.com/tpope/vim-abolish.git
 [submodule "bundle/liftweb"]
+	ignore = untracked
 	path = bundle/liftweb
 	url = git://github.com/Shadowfiend/liftweb-vim.git
 [submodule "bundle/scala"]
+	ignore = untracked
 	path = bundle/scala
 	url = git://github.com/akhil/scala-vim-bundle.git
 [submodule "bundle/grails-vim"]
+	ignore = untracked
 	path = bundle/grails-vim
 	url = git://github.com/felipero/grails-vim.git
 [submodule "bundle/clojure"]
+	ignore = untracked
 	path = bundle/clojure
 	url = git://github.com/vim-scripts/VimClojure.git
 [submodule "bundle/fsharp"]
+	ignore = untracked
 	path = bundle/fsharp
 	url = git@github.com:DrTom/fsharp-vim.git
 [submodule "bundle/vim-powerline"]
+	ignore = untracked
 	path = bundle/vim-powerline
 	url = https://github.com/Lokaltog/vim-powerline.git
