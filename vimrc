@@ -426,4 +426,6 @@ nmap <BS> :nohlsearch<CR>
 "Powerline plugin
 let g:Powerline_symbols = 'fancy'
 
+"CTRL.P.vim plugin
+set runtimepath^=~/.vim/bundle/ctrlp.vim
 
