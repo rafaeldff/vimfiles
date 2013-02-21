@@ -423,6 +423,10 @@ let ScreenShot = {'Icon':0, 'Credits':0, 'force_background':'#FFFFFF'}
 "Misc key mappings
 nmap <BS> :nohlsearch<CR>
 
+" Make j and k behave will with long lines
+nmap j gj
+nmap k gk
+
 "Powerline plugin
 let g:Powerline_symbols = 'fancy'
 
