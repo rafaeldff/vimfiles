@@ -7,34 +7,44 @@ let g:delimitor_pattern = '\(' . g:opening_pattern . '\|' . g:closing_pattern . 
 let g:climb_delimitors = { "(": ")", "{": "}", "[": "]", ")": "(", "}": "{", "]": "[" }
 
 function! Climb()
-  call DoClimb(0)
-  normal mc
+"  echom "GO///////////"
+  let opening = DoClimb(g:opening_pattern, "?", 0)
+  normal mo
+"  echom "Opening is " . opening
+
+  if !empty(opening)
+    call DoClimb(g:closing_pattern, "/", 0)
+    normal mc
+    execute "normal! `ov`c"
+  end
+  
+"  echom 'End\\\\\\\\\\\'
 endfunction
 
-function! DoClimb(stack)
-  let found = ScanForDelim()
+function! DoClimb(pattern, direction, stack)
+  let found = ScanForDelim(a:direction) 
 
-  let opening = IsOpening(found)
-  if opening
-    echo "opening " . found
+  let matching = MatchPattern(a:pattern, found)
+  if matching
+"    echom "matching dir " . a:direction . " >> " . found
     if a:stack == 0
-      echom "Yatzi!!"
+"      echom "Yatzi>> " . found
+      return found
     else
-      echom "not yet"
-      call DoClimb(a:stack - 1)
+"      echom "not yet"
+      return DoClimb(a:pattern, a:direction,  a:stack - 1)
     endif
   else
-    echom "closing " . found
-    call DoClimb(a:stack + 1)
+"    echom "un-matching dir " . a:direction . " >> " . found
+    return DoClimb(a:pattern, a:direction,  a:stack + 1)
   endif
-  
-  echom "found " . found . " is opening? " . opening
 endfunction
 
 
-function! ScanForDelim()
+" Direction is either ? or /
+function! ScanForDelim(direction)
   "search for next delim
-  execute "normal! ?" . g:delimitor_pattern ."\<cr>"
+  execute "normal! " . a:direction  . g:delimitor_pattern ."\<cr>"
 
   "Store char in @@
   normal! yl
@@ -42,18 +52,8 @@ function! ScanForDelim()
   return @@
 endfunction
 
-function! IsOpening(found)
-  let idx_opening = match(a:found, g:opening_pattern)
+function! MatchPattern(pattern, found)
+  let idx_opening = match(a:found, a:pattern)
   return idx_opening + 1
 endfunction
-
-function! Foo() 
-  let res = call Bar()
-  echom "foo: bar is " . res
-endfunction
-
-function! Bar() 
-  return "baaaar"
-endfunction
-
 
