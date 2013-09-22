@@ -97,8 +97,7 @@ set sidescroll=1
 
 "load ftplugins and indent files
 filetype plugin on
-filetype indent on
-
+filetype indent on 
 "turn on syntax highlighting
 syntax on
 
@@ -112,8 +111,8 @@ if has("gui_running")
     set t_Co=256
 
     set guitablabel=%M%t
-    set lines=40
-    set columns=115
+    "set lines=40
+    "set columns=115
 
     if has("gui_gnome")
         set term=gnome-256color
@@ -151,6 +150,7 @@ endfunction
 
 "visual search mappings
 function! s:VSetSearch()
+    echom "in vsetsearch"
     let temp = @@
     norm! gvy
     let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
@@ -178,8 +178,8 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 
-"Misc key mappings
-nmap <BS> :nohlsearch<CR>
+"Map backspace to clear matches
+nmap <BS> :nohlsearch<CR>:match none<CR>
 
 " Make j and k behave will with long lines
 nmap j gj
@@ -190,4 +190,12 @@ let g:Powerline_symbols = 'fancy'
 
 "CTRL.P.vim plugin
 set runtimepath^=~/.vim/bundle/ctrlp.vim
+
+" Open a split with vimrc
+nnoremap <leader>ev :vsplit $HOME/.vim/vimrc<cr>
+nnoremap <leader>sv :source $HOME/.vim/vimrc<cr>      
+
+highlight trailingWs ctermbg=red guibg=red 
+nnoremap <leader>w :match trailingWs /\s\+$/<cr>            
+
 
