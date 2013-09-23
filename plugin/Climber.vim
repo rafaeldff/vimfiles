@@ -1,23 +1,29 @@
 nnoremap <space> viw
 vnoremap <space> :<C-u>call Climb()<CR>
 
+function! Concat(l1, l2)
+    let new_list = deepcopy(a:l1)
+    call extend(new_list, a:l2)
+    return new_list
+endfunction
+
 let g:opening_pattern = '('
 let g:closing_pattern = ')'
 let g:climb_delimitors = { "(": ")", "{": "}", '\[': '\]' }
-let g:all_delimitors = extend(keys(g:climb_delimitors), values(g:climb_delimitors))
+let g:opening_delimitors = keys(g:climb_delimitors)
+let g:closing_delimitors = values(g:climb_delimitors)
+let g:all_delimitors = Concat(g:opening_delimitors, g:closing_delimitors)
 let g:delimitor_pattern = '\(' . join(g:all_delimitors, '\)\|\(' ) . '\)'
-
-
 
 
 function! Climb()
   echom "GO///////////"
-  let opening = DoClimb(g:opening_pattern, "b", 0)
+  let opening = DoClimb("b", "b", 0)
   normal mo
   echom "Opening is " . opening
 
-  if !empty(opening)
-    call DoClimb(g:closing_pattern, "", 0)
+  if opening
+    call DoClimb("f", "", 0)
     normal mc
     execute "normal! `ov`c"
   end
@@ -28,7 +34,7 @@ endfunction
 function! DoClimb(pattern, direction, stack)
   let found = ScanForDelim(a:direction) 
   echom "FOUND " . found
-  if empty(found)
+  if found == 0
     return found
   endif
 
@@ -54,20 +60,30 @@ function! ScanForDelim(direction)
   let flags = a:direction . "pW"
   let search_match = search(g:delimitor_pattern, flags)
 
-  if search_match ==# 0
+  "if search_match ==# 0
     "not found
-    return ""
-  else
-    return get(g:all_delimitors, search_match - 2)
+    "return ''
+  "else
+    " search_match will be 2 + index of group,
+    " and the groups in delimitor_pattern are one-to-one
+    " with all_delimitors
+    "return get(g:all_delimitors, search_match - 2)
+  "endif
+
+  if search_match == 0
+    "not found
+    return 0
   endif
+  return search_match - 2
 endfunction
 
 function! MatchPattern(pattern, found)
-  let idx_opening = match(a:found, a:pattern)
-  return idx_opening + 1
+  if a:pattern ==# "b"
+    return a:found < len(g:opening_delimitors)
+  else
+    return a:found >= len(g:opening_delimitors)
+  endif
 endfunction
-
-
 
 
 
