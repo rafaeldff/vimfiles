@@ -23,6 +23,10 @@ endfunction
 
 function! DoClimb(pattern, direction, stack)
   let found = ScanForDelim(a:direction) 
+"  echom "FOUND " . found
+  if empty(found)
+    return found
+  endif
 
   let matching = MatchPattern(a:pattern, found)
   if matching
