@@ -1,5 +1,6 @@
 nnoremap <space> viw
-vnoremap <space> :<C-u>call Climb()<CR>
+vnoremap <space> :<C-u>call ClimbUp()<CR>
+vnoremap <S-space> :<C-u>call ClimbDown()<CR>
 
 function! Concat(l1, l2)
     let new_list = deepcopy(a:l1)
@@ -15,41 +16,55 @@ let g:closing_delimitors = values(g:climb_delimitors)
 let g:all_delimitors = Concat(g:opening_delimitors, g:closing_delimitors)
 let g:delimitor_pattern = '\(' . join(g:all_delimitors, '\)\|\(' ) . '\)'
 
-
-function! Climb()
+function! ClimbDown()
+"  echom "down"
 "  echom ">>>"
-  execute "normal `>"
-  let opening = DoClimb("f", 0)
+  execute "normal `<"
+  let opening = DoClimb("f", "b", 0)
   normal mo
 
   if opening >= 0
 "    echom "<<<"
-    call DoClimb("b", 0)
+    call DoClimb("f", "f", 0)
     normal mc
     execute "normal! `ov`c"
   end
-  
 endfunction
 
-function! DoClimb(direction, stack)
-  let found = ScanForDelim(a:direction) 
+function! ClimbUp()
+"  echom "up"
+"  echom ">>>"
+  execute "normal `>"
+  let opening = DoClimb("f", "f", 0)
+  normal mo
+
+  if opening >= 0
+"    echom "<<<"
+    call DoClimb("b", "b", 0)
+    normal mc
+    execute "normal! `ov`c"
+  end
+endfunction
+
+function! DoClimb(scan_direction, match_direction, stack)
+  let found = ScanForDelim(a:scan_direction) 
   if found < 0
 "    echom "not found"
     return found
   endif
 
-  let matching = MatchesDirection(a:direction, found)
+  let matching = MatchesDirection(a:match_direction, found)
   if matching
     if a:stack == 0
 "      echom "yahtzi ! " . get(g:all_delimitors, found)
       return found
     else
 "      echom "not-yet: " . get(g:all_delimitors, found)
-      return DoClimb(a:direction,  a:stack - 1)
+      return DoClimb(a:scan_direction, a:match_direction,  a:stack - 1)
     endif
   else
 "    echom "unmatch: " . get(g:all_delimitors, found)
-    return DoClimb(a:direction,  a:stack + 1)
+    return DoClimb(a:scan_direction, a:match_direction,  a:stack + 1)
   endif
 endfunction
 
