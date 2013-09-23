@@ -18,12 +18,12 @@ let g:delimitor_pattern = '\(' . join(g:all_delimitors, '\)\|\(' ) . '\)'
 
 function! Climb()
   echom "GO///////////"
-  let opening = DoClimb("b", "b", 0)
+  let opening = DoClimb("b", 0)
   normal mo
   echom "Opening is " . opening
 
   if opening
-    call DoClimb("f", "", 0)
+    call DoClimb("f", 0)
     normal mc
     execute "normal! `ov`c"
   end
@@ -31,14 +31,14 @@ function! Climb()
   echom 'End\\\\\\\\\\\'
 endfunction
 
-function! DoClimb(pattern, direction, stack)
+function! DoClimb(direction, stack)
   let found = ScanForDelim(a:direction) 
   echom "FOUND " . found
   if found == 0
     return found
   endif
 
-  let matching = MatchPattern(a:pattern, found)
+  let matching = MatchesDirection(a:direction, found)
   if matching
     echom "matching dir " . a:direction . " >> " . found
     if a:stack == 0
@@ -46,29 +46,20 @@ function! DoClimb(pattern, direction, stack)
       return found
     else
       echom "not yet"
-      return DoClimb(a:pattern, a:direction,  a:stack - 1)
+      return DoClimb(a:direction,  a:stack - 1)
     endif
   else
     echom "un-matching dir " . a:direction . " >> " . found
-    return DoClimb(a:pattern, a:direction,  a:stack + 1)
+    return DoClimb(a:direction,  a:stack + 1)
   endif
 endfunction
 
 
-" Direction is either b for backwards or ""
+" Direction is either b for backwards or f for forwards
 function! ScanForDelim(direction)
-  let flags = a:direction . "pW"
+  let direction_flag = (a:direction ==# "b") ? "b" : ""
+  let flags = direction_flag . "pW"
   let search_match = search(g:delimitor_pattern, flags)
-
-  "if search_match ==# 0
-    "not found
-    "return ''
-  "else
-    " search_match will be 2 + index of group,
-    " and the groups in delimitor_pattern are one-to-one
-    " with all_delimitors
-    "return get(g:all_delimitors, search_match - 2)
-  "endif
 
   if search_match == 0
     "not found
@@ -77,10 +68,12 @@ function! ScanForDelim(direction)
   return search_match - 2
 endfunction
 
-function! MatchPattern(pattern, found)
-  if a:pattern ==# "b"
+function! MatchesDirection(direction, found)
+  if a:direction ==# "b" "looking backwards
+    "return true if index of match is in the first part, the opening delims
     return a:found < len(g:opening_delimitors)
   else
+    "return true if index of match is in the latter part, the closing delims
     return a:found >= len(g:opening_delimitors)
   endif
 endfunction
