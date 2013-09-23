@@ -198,4 +198,8 @@ nnoremap <leader>sv :source $HOME/.vim/vimrc<cr>
 highlight trailingWs ctermbg=red guibg=red 
 nnoremap <leader>w :match trailingWs /\s\+$/<cr>            
 
+" Clojure
+let g:vimclojure#ParenRainbow=1
+
+let vimclojure#SetupKeyMap = 0
 
