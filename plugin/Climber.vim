@@ -16,8 +16,17 @@ let g:delimitor_pattern = '\(' . join(g:all_delimitors, '\)\|\(' ) . '\)'
 let g:history = []
 
 function! ClimbDown()
+  if Empty(g:history)
+    return
+  endif
+
   let last_pos = Pop(g:history)
   call setpos(".", last_pos)
+
+  if Empty(g:history)
+    execute "normal! \<esc>viw"
+    return
+  endif
 
   let opening = DoClimb("f", "f", 0)
   normal mo
@@ -30,10 +39,8 @@ function! ClimbDown()
 endfunction
 
 function! StartClimbing()
-  call Push(g:history, getpos("."))
   execute "normal! viw"
-endfunction
-
+endfunction 
 function! ClimbUp()
   call Push(g:history, getpos("."))
 
@@ -93,9 +100,17 @@ function! Push(stack, new_element)
 endfunction
 
 function! Pop(stack)
-  let last_element = get(a:stack, len(a:stack) - 1)
-  call remove(a:stack, len(a:stack) - 1)
+  let size = len(a:stack)
+  let last_element = get(a:stack, size - 1)
+  call remove(a:stack, size - 1)
   return last_element
 endfunction
 
+function! Empty(stack)
+  return empty(a:stack)
+endfunction
+
+function! First(stack)
+  return len(a:stack) == 1
+endfunction
 
