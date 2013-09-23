@@ -1,4 +1,4 @@
-nnoremap <space> viw
+nnoremap <space> :call StartClimbing()<CR>
 vnoremap <space> :<C-u>call ClimbUp()<CR>
 vnoremap <S-space> :<C-u>call ClimbDown()<CR>
 
@@ -8,17 +8,18 @@ function! Concat(l1, l2)
     return new_list
 endfunction
 
-let g:opening_pattern = '('
-let g:closing_pattern = ')'
 let g:climb_delimitors = { "(": ")", "{": "}", '\[': '\]' }
 let g:opening_delimitors = keys(g:climb_delimitors)
 let g:closing_delimitors = values(g:climb_delimitors)
 let g:all_delimitors = Concat(g:opening_delimitors, g:closing_delimitors)
 let g:delimitor_pattern = '\(' . join(g:all_delimitors, '\)\|\(' ) . '\)'
+let g:history = []
 
 function! ClimbDown()
-  execute "normal `>"
-  let opening = DoClimb("b", "f", 0)
+  let last_pos = Pop(g:history)
+  call setpos(".", last_pos)
+
+  let opening = DoClimb("f", "f", 0)
   normal mo
 
   if opening >= 0
@@ -28,7 +29,14 @@ function! ClimbDown()
   end
 endfunction
 
+function! StartClimbing()
+  call Push(g:history, getpos("."))
+  execute "normal! viw"
+endfunction
+
 function! ClimbUp()
+  call Push(g:history, getpos("."))
+
   execute "normal `>"
   let opening = DoClimb("f", "f", 0)
   normal mo
@@ -80,5 +88,14 @@ function! MatchesDirection(direction, found)
   endif
 endfunction
 
+function! Push(stack, new_element)
+  call add(a:stack, a:new_element)
+endfunction
+
+function! Pop(stack)
+  let last_element = get(a:stack, len(a:stack) - 1)
+  call remove(a:stack, len(a:stack) - 1)
+  return last_element
+endfunction
 
 
