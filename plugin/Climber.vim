@@ -3,8 +3,12 @@ vnoremap <space> :<C-u>call Climb()<CR>
 
 let g:opening_pattern = '('
 let g:closing_pattern = ')'
-let g:delimitor_pattern = '\(' . g:opening_pattern . '\)' . '\|' . '\(' . g:closing_pattern . '\)'
-let g:climb_delimitors = { "(": ")", "{": "}", "[": "]", ")": "(", "}": "{", "]": "[" }
+let g:climb_delimitors = { "(": ")", "{": "}", '\[': '\]' }
+let g:all_delimitors = extend(keys(g:climb_delimitors), values(g:climb_delimitors))
+let g:delimitor_pattern = '\(' . join(g:all_delimitors, '\)\|\(' ) . '\)'
+
+
+
 
 function! Climb()
   echom "GO///////////"
@@ -51,11 +55,10 @@ function! ScanForDelim(direction)
   let search_match = search(g:delimitor_pattern, flags)
 
   if search_match ==# 0
+    "not found
     return ""
-  elseif search_match ==# 2
-    return "("
-  elseif search_match ==# 3
-    return ")"
+  else
+    return get(g:all_delimitors, search_match - 2)
   endif
 endfunction
 
@@ -63,4 +66,8 @@ function! MatchPattern(pattern, found)
   let idx_opening = match(a:found, a:pattern)
   return idx_opening + 1
 endfunction
+
+
+
+
 
