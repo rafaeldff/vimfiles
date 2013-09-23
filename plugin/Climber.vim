@@ -17,10 +17,8 @@ let g:delimitor_pattern = '\(' . join(g:all_delimitors, '\)\|\(' ) . '\)'
 
 
 function! Climb()
-  echom "GO///////////"
   let opening = DoClimb("b", 0)
   normal mo
-  echom "Opening is " . opening
 
   if opening
     call DoClimb("f", 0)
@@ -28,28 +26,22 @@ function! Climb()
     execute "normal! `ov`c"
   end
   
-  echom 'End\\\\\\\\\\\'
 endfunction
 
 function! DoClimb(direction, stack)
   let found = ScanForDelim(a:direction) 
-  echom "FOUND " . found
   if found == 0
     return found
   endif
 
   let matching = MatchesDirection(a:direction, found)
   if matching
-    echom "matching dir " . a:direction . " >> " . found
     if a:stack == 0
-      echom "Yatzi>> " . found
       return found
     else
-      echom "not yet"
       return DoClimb(a:direction,  a:stack - 1)
     endif
   else
-    echom "un-matching dir " . a:direction . " >> " . found
     return DoClimb(a:direction,  a:stack + 1)
   endif
 endfunction
