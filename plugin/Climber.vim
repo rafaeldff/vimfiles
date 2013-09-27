@@ -8,7 +8,8 @@ function! Concat(l1, l2)
     return new_list
 endfunction
 
-let g:climb_delimitors = { "(": ")", "{": "}", '\[': '\]' }
+let g:unnested = ['"']
+let g:climb_delimitors = { "(": ")", "{": "}", '\[': '\]', '"': '"'}
 let g:opening_delimitors = keys(g:climb_delimitors)
 let g:closing_delimitors = values(g:climb_delimitors)
 let g:all_delimitors = Concat(g:opening_delimitors, g:closing_delimitors)
@@ -78,7 +79,7 @@ endfunction
 
 " Direction is either b for backwards or f for forwards
 " Returns index of match (inside delimitor_pattern, i.e. all_delimitors
-" or a negative number in case of no match.
+" or a negative number in case of no match.)
 function! ScanForDelim(direction)
   let direction_flag = (a:direction ==# "b") ? "b" : ""
   let flags = direction_flag . "pW"
@@ -88,13 +89,9 @@ function! ScanForDelim(direction)
 endfunction
 
 function! MatchesDirection(direction, found)
-  if a:direction ==# "b" "looking backwards
-    "return true if index of match is in the first part, the opening delims
-    return a:found < len(g:opening_delimitors)
-  else
-    "return true if index of match is in the latter part, the closing delims
-    return a:found >= len(g:opening_delimitors)
-  endif
+  let delim_direction = (a:found < len(g:opening_delimitors) ? "b" : "f" )
+
+  return a:direction ==# delim_direction "looking backwards
 endfunction
 
 function! Push(stack, new_element)
