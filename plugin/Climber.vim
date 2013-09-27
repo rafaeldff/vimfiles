@@ -47,24 +47,56 @@ endfunction
 function! ClimbUp()
   call Push(g:history, getpos("."))
 
+  "echom "fff"
   execute "normal `>"
-  let opening = DoClimb("f", 0)
+  let closing = DoClimb("f", 0)
+  let delim = get(g:all_delimitors, closing)
   normal mo
 
-  if opening >= 0
-    call DoClimb("b", 0)
+  if closing >= 0
+    echom "FOUND " . get(g:all_delimitors, closing)
+    "call DoClimb("b", 0)
+    call LookFor(BuildPattern({delim: g:climb_delimitors[delim]}), "b", 0)
     normal mc
     execute "normal! `ov`c"
-  end
+  endif
 endfunction
 
-function! DoClimb(direction, depth)
-  let found = ScanForDelim(a:direction) 
+function! BuildPattern(delim_map)
+  let opening_delimitors = keys(delim_map)
+  let closing_delimitors = values(delim_map)
+  let all_delimitors = Concat(opening_delimitors, closing_delimitors)
+  let delimitor_pattern = '\(' . join(g:all_delimitors, '\)\|\(' ) . '\)'
+  return {"pattern-string": delimitor_pattern, "pattern-list": all_delimitors}
+endfunction
+
+function! LookFor(pattern, direction, depth)
+  let found = ScanForDelim(a:pattern, a:direction) 
   if found < 0
     return found
   endif
 
-  let matching = MatchesDirection(a:direction, found)
+  let matching = MatchesDirection(a:pattern, a:direction, found)
+  "echom "Matching? " . matching . ":: " . get(g:all_delimitors, found) . " depth " . a:depth
+  if matching
+    if a:depth == 0
+      return found
+    else
+      return DoClimb(a:pattern, a:direction, a:depth - 1)
+    endif
+  else
+    return DoClimb(a:pattern, a:direction, a:depth + 1)
+  endif
+endfunction
+
+function! DoClimb(direction, depth)
+  let found = ScanForDelim(g:delimitor_pattern, a:direction) 
+  if found < 0
+    return found
+  endif
+
+  let matching = MatchesDirection(g:delimitor_pattern, a:direction, found)
+  "echom "Matching? " . matching . ":: " . get(g:all_delimitors, found) . " depth " . a:depth
   if matching
     if a:depth == 0
       return found
@@ -77,19 +109,21 @@ function! DoClimb(direction, depth)
 endfunction
 
 
+" Pattern is actually a map of {"pattern-string": "()", "pattern-list": []}
 " Direction is either b for backwards or f for forwards
 " Returns index of match (inside delimitor_pattern, i.e. all_delimitors
 " or a negative number in case of no match.)
-function! ScanForDelim(direction)
+function! ScanForDelim(pattern, direction)
   let direction_flag = (a:direction ==# "b") ? "b" : ""
   let flags = direction_flag . "pW"
-  let search_match = search(g:delimitor_pattern, flags)
+  let search_match = search(pattern["pattern-string"], flags)
 
   return search_match - 2
 endfunction
 
-function! MatchesDirection(direction, found)
-  let delim_direction = (a:found < len(g:opening_delimitors) ? "b" : "f" )
+function! MatchesDirection(pattern, direction, found)
+  let delimiter_list = pattern["pattern-list"]
+  let delim_direction = (a:found < len(pattern-list) ? "b" : "f" )
 
   return a:direction ==# delim_direction "looking backwards
 endfunction
