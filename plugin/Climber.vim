@@ -39,8 +39,10 @@ function! ClimbDown()
 endfunction
 
 function! StartClimbing()
+  let g:history = []
   execute "normal! viw"
 endfunction 
+
 function! ClimbUp()
   call Push(g:history, getpos("."))
 
