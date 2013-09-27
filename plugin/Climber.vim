@@ -29,11 +29,11 @@ function! ClimbDown()
     return
   endif
 
-  let opening = DoClimb("f", "f", 0)
+  let opening = DoClimb("f", 0)
   normal mo
 
   if opening >= 0
-    call DoClimb("b", "b", 0)
+    call DoClimb("b", 0)
     normal mc
     execute "normal! `ov`c"
   end
@@ -48,31 +48,31 @@ function! ClimbUp()
   call Push(g:history, getpos("."))
 
   execute "normal `>"
-  let opening = DoClimb("f", "f", 0)
+  let opening = DoClimb("f", 0)
   normal mo
 
   if opening >= 0
-    call DoClimb("b", "b", 0)
+    call DoClimb("b", 0)
     normal mc
     execute "normal! `ov`c"
   end
 endfunction
 
-function! DoClimb(scan_direction, match_direction, stack)
-  let found = ScanForDelim(a:scan_direction) 
+function! DoClimb(direction, depth)
+  let found = ScanForDelim(a:direction) 
   if found < 0
     return found
   endif
 
-  let matching = MatchesDirection(a:match_direction, found)
+  let matching = MatchesDirection(a:direction, found)
   if matching
-    if a:stack == 0
+    if a:depth == 0
       return found
     else
-      return DoClimb(a:scan_direction, a:match_direction,  a:stack - 1)
+      return DoClimb(a:direction, a:depth - 1)
     endif
   else
-    return DoClimb(a:scan_direction, a:match_direction,  a:stack + 1)
+    return DoClimb(a:direction, a:depth + 1)
   endif
 endfunction
 
