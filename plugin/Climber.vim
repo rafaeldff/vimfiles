@@ -9,7 +9,8 @@ function! Concat(l1, l2)
 endfunction
 
 let g:unnested = ['"']
-let g:climb_delimitors = { "(": ")", "{": "}", '\[': '\]', '"': '"'}
+"let g:climb_delimitors = { "(": ")", "{": "}", '\[': '\]'}
+let g:climb_delimitors = { ")": "(", "}": "{", '\]': '\['}
 let g:opening_delimitors = keys(g:climb_delimitors)
 let g:closing_delimitors = values(g:climb_delimitors)
 let g:all_delimitors = Concat(g:opening_delimitors, g:closing_delimitors)
@@ -47,55 +48,66 @@ endfunction
 function! ClimbUp()
   call Push(g:history, getpos("."))
 
-  "echom "fff"
+  echom "fff"
   execute "normal `>"
-  let closing = DoClimb("f", 0)
+  let closing = LookFor(BuildPattern(g:climb_delimitors),"f", 0)
   let delim = get(g:all_delimitors, closing)
   normal mo
 
   if closing >= 0
-    echom "FOUND " . get(g:all_delimitors, closing)
-    "call DoClimb("b", 0)
-    call LookFor(BuildPattern({delim: g:climb_delimitors[delim]}), "b", 0)
+    echom "bbb"
+    echom "Delim is " . delim
+    let delimitor_pair = NewDict(delim, g:climb_delimitors[delim])
+    call LookFor(BuildPattern(delimitor_pair), "b", 0)
     normal mc
     execute "normal! `ov`c"
   endif
 endfunction
 
+function! NewDict(k, v)
+  let dict = {}
+  let dict[a:k] = a:v
+  return dict
+endfunction
+
 function! BuildPattern(delim_map)
-  let opening_delimitors = keys(delim_map)
-  let closing_delimitors = values(delim_map)
-  let all_delimitors = Concat(opening_delimitors, closing_delimitors)
-  let delimitor_pattern = '\(' . join(g:all_delimitors, '\)\|\(' ) . '\)'
-  return {"pattern-string": delimitor_pattern, "pattern-list": all_delimitors}
+  let closing_delimitors = keys(a:delim_map)
+  let opening_delimitors = values(a:delim_map)
+  let all_delimitors = Concat(closing_delimitors, opening_delimitors)
+  let delimitor_pattern = '\(' . join(all_delimitors, '\)\|\(' ) . '\)'
+  echom delimitor_pattern
+  return {"pattern-string": delimitor_pattern, "pattern-list": closing_delimitors}
 endfunction
 
 function! LookFor(pattern, direction, depth)
+  echom "LookFor(" . a:direction . "," . a:depth . ")"
   let found = ScanForDelim(a:pattern, a:direction) 
   if found < 0
     return found
   endif
 
   let matching = MatchesDirection(a:pattern, a:direction, found)
-  "echom "Matching? " . matching . ":: " . get(g:all_delimitors, found) . " depth " . a:depth
   if matching
     if a:depth == 0
       return found
     else
-      return DoClimb(a:pattern, a:direction, a:depth - 1)
+      return LookFor(a:pattern, a:direction, a:depth - 1)
     endif
   else
-    return DoClimb(a:pattern, a:direction, a:depth + 1)
+    return LookFor(a:pattern, a:direction, a:depth + 1)
   endif
 endfunction
 
 function! DoClimb(direction, depth)
-  let found = ScanForDelim(g:delimitor_pattern, a:direction) 
+  "echom "DoClimb(" . a:direction . "," . a:depth . ")"
+  let temp_patt = {"pattern-string": g:delimitor_pattern, "pattern-list": g:all_delimitors}
+  let found = ScanForDelim(temp_patt, a:direction) 
   if found < 0
+    "echom("not found...")
     return found
   endif
 
-  let matching = MatchesDirection(g:delimitor_pattern, a:direction, found)
+  let matching = MatchesDirection(temp_patt, a:direction, found)
   "echom "Matching? " . matching . ":: " . get(g:all_delimitors, found) . " depth " . a:depth
   if matching
     if a:depth == 0
@@ -116,14 +128,20 @@ endfunction
 function! ScanForDelim(pattern, direction)
   let direction_flag = (a:direction ==# "b") ? "b" : ""
   let flags = direction_flag . "pW"
-  let search_match = search(pattern["pattern-string"], flags)
 
+  let search_match = search(a:pattern["pattern-string"], flags)
+
+  let res = search_match - 2
+  echo "found " res "  in pattern " . string(a:pattern)
   return search_match - 2
 endfunction
 
 function! MatchesDirection(pattern, direction, found)
-  let delimiter_list = pattern["pattern-list"]
-  let delim_direction = (a:found < len(pattern-list) ? "b" : "f" )
+  let delimiter_list = a:pattern["pattern-list"]
+  " Closing delimitors match forward direction
+  " Opening delimitors match backward direction
+  let delim_direction = (a:found < len(delimiter_list) ? "f" : "b" )
+  echom "delimiter_list: " . string(delimiter_list) " delim_dir: " . delim_direction
 
   return a:direction ==# delim_direction "looking backwards
 endfunction
