@@ -8,7 +8,7 @@ function! Concat(l1, l2)
     return new_list
 endfunction
 
-let g:climb_delimitors = { ")": "(", "}": "{", '\]': '\['}
+let g:climb_delimitors = { ")": "(", "}": "{", '\]': '\[', '"': '"'}
 let g:opening_delimitors = keys(g:climb_delimitors)
 let g:closing_delimitors = values(g:climb_delimitors)
 let g:all_delimitors = Concat(g:opening_delimitors, g:closing_delimitors)
@@ -48,28 +48,28 @@ function! Climb()
   normal mo
 
   if closing >= 0
-    let delimitor_pair = NewDict(delim, g:climb_delimitors[delim])
-    call LookFor(BuildPattern(delimitor_pair), "b", 0)
+    call LookFor(MatchingDelimitorPattern(delim), "b", 0)
     normal mc
     execute "normal! `ov`c"
   endif
 endfunction
 
 function! InitialPattern()
-  return BuildPattern(g:climb_delimitors)
+  return BuildPattern(keys(g:climb_delimitors), values(g:climb_delimitors))
 endfunction
 
 function! MatchingDelimitorPattern(delimitor)
-  let delimitor_pair = NewDict(a:delimitor_pair, g:climb_delimitors[delim])
-  return BuildPattern(delimitor_pair)
+  if a:delimitor ==# '"'
+    return BuildPattern(['"'], [])
+  else
+    return BuildPattern([a:delimitor], [g:climb_delimitors[a:delimitor]])
+  endif
 endfunction
 
-function! BuildPattern(delim_map)
-  let closing_delimitors = keys(a:delim_map)
-  let opening_delimitors = values(a:delim_map)
-  let all_delimitors = Concat(closing_delimitors, opening_delimitors)
+function! BuildPattern(closing_delimitors, opening_delimitors)
+  let all_delimitors = Concat(a:closing_delimitors, a:opening_delimitors)
   let delimitor_pattern = '\(' . join(all_delimitors, '\)\|\(' ) . '\)'
-  return {"pattern-string": delimitor_pattern, "closing-delimitors-list": closing_delimitors}
+  return {"pattern-string": delimitor_pattern, "closing-delimitors-list": a:closing_delimitors}
 endfunction
 
 function! LookFor(pattern, direction, depth)
