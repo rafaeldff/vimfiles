@@ -43,7 +43,7 @@ function! ClimbDown()
 endfunction
 
 function! Climb()
-  let closing = LookFor(BuildPattern(g:climb_delimitors),"f", 0)
+  let closing = LookFor(InitialPattern(),"f", 0)
   let delim = get(g:all_delimitors, closing)
   normal mo
 
@@ -53,6 +53,15 @@ function! Climb()
     normal mc
     execute "normal! `ov`c"
   endif
+endfunction
+
+function! InitialPattern()
+  return BuildPattern(g:climb_delimitors)
+endfunction
+
+function! MatchingDelimitorPattern(delimitor)
+  let delimitor_pair = NewDict(a:delimitor_pair, g:climb_delimitors[delim])
+  return BuildPattern(delimitor_pair)
 endfunction
 
 function! BuildPattern(delim_map)
