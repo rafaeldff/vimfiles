@@ -8,6 +8,7 @@ function! Concat(l1, l2)
     return new_list
 endfunction
 
+let g:unnested = ['"', "'"]
 let g:climb_delimitors = { ")": "(", "}": "{", '\]': '\[', '"': '"'}
 let g:opening_delimitors = keys(g:climb_delimitors)
 let g:closing_delimitors = values(g:climb_delimitors)
@@ -59,8 +60,8 @@ function! InitialPattern()
 endfunction
 
 function! MatchingDelimitorPattern(delimitor)
-  if a:delimitor ==# '"'
-    return BuildPattern(['"'], [])
+  if index(g:unnested, a:delimitor) >= 0
+    return BuildPattern([], [a:delimitor])
   else
     return BuildPattern([a:delimitor], [g:climb_delimitors[a:delimitor]])
   endif
@@ -99,7 +100,9 @@ function! ScanForDelim(pattern, direction)
   let direction_flag = (a:direction ==# "b") ? "b" : ""
   let flags = direction_flag . "pW"
 
+
   let search_match = search(a:pattern["pattern-string"], flags)
+
 
   return search_match - 2
 endfunction
@@ -108,6 +111,7 @@ function! MatchesDirection(pattern, direction, found)
   let delimiter_list = a:pattern["closing-delimitors-list"]
   " Closing delimitors match forward direction
   " Opening delimitors match backward direction
+
   let delim_direction = (a:found < len(delimiter_list) ? "f" : "b" )
 
   return a:direction ==# delim_direction "looking backwards
