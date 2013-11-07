@@ -211,5 +211,16 @@ if !exists(":DiffOrig")
 		  \ | wincmd p | diffthis
 endif
 
-set maxfuncdepth=2048
+set maxfuncdepth=2048 
 
+function! JumpToDir(dest)
+  execute "cd  ~/.marks/" . a:dest
+  pwd
+endfunction
+
+function! JumpToDirCompletions(arg_lead, L, P)
+  "return globpath("~/.marks", a:arg_lead . "*")
+  return system("ls -1d ~/.marks/* | sed 's,^.*.marks/,,'")
+endfunction
+
+command! -complete=custom,JumpToDirCompletions -nargs=1 Jump call JumpToDir("<args>")
