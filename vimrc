@@ -195,8 +195,6 @@ set runtimepath^=~/.vim/bundle/ctrlp.vim
 nnoremap <leader>ev :vsplit $HOME/.vim/vimrc<cr>
 nnoremap <leader>sv :source $HOME/.vim/vimrc<cr>      
 
-highlight trailingWs ctermbg=red guibg=red 
-nnoremap <leader>w :match trailingWs /\s\+$/<cr>            
 
 " Clojure
 let g:vimclojure#ParenRainbow=1
@@ -224,3 +222,8 @@ function! JumpToDirCompletions(arg_lead, L, P)
 endfunction
 
 command! -complete=custom,JumpToDirCompletions -nargs=1 Jump call JumpToDir("<args>")
+nnoremap <leader>w :%s/facts\?/& :wip/g<cr>
+nnoremap <leader>W :%s/ :wip//g<cr>
+
+vnoremap <leader>w :s/facts\?/& :wip/g<cr>
+vnoremap <leader>W :s/ :wip//g<cr>
