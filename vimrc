@@ -227,3 +227,7 @@ nnoremap <leader>W :%s/ :wip//g<cr>
 
 vnoremap <leader>w :s/facts\?/& :wip/g<cr>
 vnoremap <leader>W :s/ :wip//g<cr>
+
+nnoremap <leader>d mf"dyiwgg/(defn\?\s*d<cr><esc>:nohlsearch<cr>
+
+
