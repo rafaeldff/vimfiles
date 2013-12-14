@@ -193,7 +193,7 @@ set runtimepath^=~/.vim/bundle/ctrlp.vim
 
 " Open a split with vimrc
 nnoremap <leader>ev :vsplit $HOME/.vim/vimrc<cr>
-nnoremap <leader>sv :source $HOME/.vim/vimrc<cr>      
+nnoremap <leader>sv :source %<cr>      
 
 
 " Clojure
