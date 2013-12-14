@@ -60,11 +60,7 @@ function! InitialPattern()
 endfunction
 
 function! MatchingDelimitorPattern(delimitor)
-  if index(g:unnested, a:delimitor) >= 0
-    return BuildPattern([], [a:delimitor])
-  else
-    return BuildPattern([a:delimitor], [g:climb_delimitors[a:delimitor]])
-  endif
+  return BuildPattern([a:delimitor], [g:climb_delimitors[a:delimitor]])
 endfunction
 
 function! BuildPattern(closing_delimitors, opening_delimitors)
@@ -121,10 +117,8 @@ endfunction
 function! MatchesDirection(pattern, direction, found)
   let the_char = FindChar(a:found, a:pattern)
 
-"  echom "MatchesDirection pattern " . string(a:pattern) . " dir " .  string(a:direction) . " found " . the_char
 
   if Contains(g:unnested, the_char)
-    "echom "FOUND QUOTE!!!!"
     let delim_direction = QuoteDirection(the_char)
   else
     let delimiter_list = a:pattern["closing-delimitors-list"]
@@ -156,14 +150,10 @@ function! QuoteIndex(quote_char)
       break
     end
   endwhile
-"  echom "Count " . cnt
 
   call setpos('.', save_cursor)
   return cnt
 endfunction
-
-nnoremap 9 :echom QuoteIndex()<cr>
-nnoremap 8 :echom QuoteDirection()<cr>
 
 function! NewDict(k, v)
   let dict = {}
