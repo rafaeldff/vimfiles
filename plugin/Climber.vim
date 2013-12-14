@@ -9,8 +9,7 @@ function! Concat(l1, l2)
 endfunction
 
 let g:unnested = ['"', "'"]
-"let g:climb_delimitors = { ")": "(", "}": "{", '\]': '\[', '"': '"'}
-let g:climb_delimitors = { ")": "(", '\]': '\[', '"': '"', "'": "'"}
+let g:climb_delimitors = { ")": "(", "}": "{", '\]': '\[', '"': '"'}
 let g:opening_delimitors = keys(g:climb_delimitors)
 let g:closing_delimitors = values(g:climb_delimitors)
 let g:all_delimitors = Concat(g:opening_delimitors, g:closing_delimitors)
