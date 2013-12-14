@@ -9,7 +9,8 @@ function! Concat(l1, l2)
 endfunction
 
 let g:unnested = ['"', "'"]
-let g:climb_delimitors = { ")": "(", "}": "{", '\]': '\[', '"': '"'}
+"let g:climb_delimitors = { ")": "(", "}": "{", '\]': '\[', '"': '"'}
+let g:climb_delimitors = { ")": "(", '\]': '\[', '"': '"', "'": "'"}
 let g:opening_delimitors = keys(g:climb_delimitors)
 let g:closing_delimitors = values(g:climb_delimitors)
 let g:all_delimitors = Concat(g:opening_delimitors, g:closing_delimitors)
@@ -123,9 +124,9 @@ function! MatchesDirection(pattern, direction, found)
 
 "  echom "MatchesDirection pattern " . string(a:pattern) . " dir " .  string(a:direction) . " found " . the_char
 
-  if the_char ==# '"'
-"    echom "FOUND QUOTE!!!!"
-    let delim_direction = QuoteDirection()
+  if Contains(g:unnested, the_char)
+    "echom "FOUND QUOTE!!!!"
+    let delim_direction = QuoteDirection(the_char)
   else
     let delimiter_list = a:pattern["closing-delimitors-list"]
     " Closing delimitors match forward direction
@@ -137,11 +138,11 @@ function! MatchesDirection(pattern, direction, found)
   return a:direction ==# delim_direction "looking backwards
 endfunction
 
-function! QuoteDirection()
-  return ((QuoteIndex() % 2) == 0) ? "f" : "b"
+function! QuoteDirection(quote_char)
+  return ((QuoteIndex(a:quote_char) % 2) == 0) ? "f" : "b"
 endfunction
 
-function! QuoteIndex()
+function! QuoteIndex(quote_char)
   let save_cursor = getpos(".")
   
   " start at the last char in the file and wrap for the
@@ -149,7 +150,7 @@ function! QuoteIndex()
   normal G$
   let flags = "w"
   let cnt = 0
-  while search('"', flags) > 0 
+  while search(a:quote_char, flags) > 0 
     let cnt = cnt + 1
     let flags = "W"
     if (getpos(".") == save_cursor)
@@ -162,13 +163,17 @@ function! QuoteIndex()
   return cnt
 endfunction
 
-"nnoremap 9 :echom QuoteIndex()<cr>
-"nnoremap 8 :echom QuoteDirection()<cr>
+nnoremap 9 :echom QuoteIndex()<cr>
+nnoremap 8 :echom QuoteDirection()<cr>
 
 function! NewDict(k, v)
   let dict = {}
   let dict[a:k] = a:v
   return dict
+endfunction
+
+function! Contains(list, element)
+  return (index(a:list, a:element) >= 0)
 endfunction
 
 function! Push(stack, new_element)
@@ -189,4 +194,5 @@ endfunction
 function! First(stack)
   return len(a:stack) == 1
 endfunction
+
 
