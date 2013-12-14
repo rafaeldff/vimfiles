@@ -9,7 +9,7 @@ function! Concat(l1, l2)
 endfunction
 
 let g:unnested = ['"', "'"]
-let g:climb_delimitors = { ")": "(", "}": "{", '\]': '\['}
+let g:climb_delimitors = { ")": "(", "}": "{", '\]': '\[', '"': '"'}
 let g:opening_delimitors = keys(g:climb_delimitors)
 let g:closing_delimitors = values(g:climb_delimitors)
 let g:all_delimitors = Concat(g:opening_delimitors, g:closing_delimitors)
@@ -70,7 +70,7 @@ endfunction
 function! BuildPattern(closing_delimitors, opening_delimitors)
   let all_delimitors = Concat(a:closing_delimitors, a:opening_delimitors)
   let delimitor_pattern = '\(' . join(all_delimitors, '\)\|\(' ) . '\)'
-  return {"pattern-string": delimitor_pattern, "closing-delimitors-list": a:closing_delimitors}
+  return {"pattern-string": delimitor_pattern, "closing-delimitors-list": a:closing_delimitors, "pattern-list": all_delimitors}
 endfunction
 
 function! LookFor(pattern, direction, depth)
@@ -94,6 +94,7 @@ endfunction
 
 " Pattern is actually a map of {"pattern-string": "()", "closing-delimitors-list": []}
 " Direction is either b for backwards or f for forwards
+"
 " Returns index of match (inside pattern-list
 " or a negative number in case of no match.)
 function! ScanForDelim(pattern, direction)
@@ -107,15 +108,62 @@ function! ScanForDelim(pattern, direction)
   return search_match - 2
 endfunction
 
-function! MatchesDirection(pattern, direction, found)
-  let delimiter_list = a:pattern["closing-delimitors-list"]
-  " Closing delimitors match forward direction
-  " Opening delimitors match backward direction
+function! FindChar(idx, pattern)
+  return a:pattern["pattern-list"][a:idx]
+endfunction
 
-  let delim_direction = (a:found < len(delimiter_list) ? "f" : "b" )
+" Pattern contains a closing-delimitors-list
+" Direction is 'f' or 'b'
+" Found is an index within pattern-list (closing-delimitors-list is a prefix thereof)
+"
+" When direction is 'f', returns true iff found is a closing delimitor
+" When direction is 'b', returns true iff found is an opening delimitor
+function! MatchesDirection(pattern, direction, found)
+  let the_char = FindChar(a:found, a:pattern)
+
+"  echom "MatchesDirection pattern " . string(a:pattern) . " dir " .  string(a:direction) . " found " . the_char
+
+  if the_char ==# '"'
+"    echom "FOUND QUOTE!!!!"
+    let delim_direction = QuoteDirection()
+  else
+    let delimiter_list = a:pattern["closing-delimitors-list"]
+    " Closing delimitors match forward direction
+    " Opening delimitors match backward direction
+
+    let delim_direction = (a:found < len(delimiter_list) ? "f" : "b" )
+  endif
 
   return a:direction ==# delim_direction "looking backwards
 endfunction
+
+function! QuoteDirection()
+  return ((QuoteIndex() % 2) == 0) ? "f" : "b"
+endfunction
+
+function! QuoteIndex()
+  let save_cursor = getpos(".")
+  
+  " start at the last char in the file and wrap for the
+  " first search to find match at start of file
+  normal G$
+  let flags = "w"
+  let cnt = 0
+  while search('"', flags) > 0 
+    let cnt = cnt + 1
+    let flags = "W"
+    if (getpos(".") == save_cursor)
+      break
+    end
+  endwhile
+"  echom "Count " . cnt
+
+  call setpos('.', save_cursor)
+  return cnt
+endfunction
+
+"nnoremap 9 :echom QuoteIndex()<cr>
+"nnoremap 8 :echom QuoteDirection()<cr>
 
 function! NewDict(k, v)
   let dict = {}
