@@ -117,9 +117,8 @@ endfunction
 function! MatchesDirection(pattern, direction, found)
   let the_char = FindChar(a:found, a:pattern)
 
-
   if Contains(g:unnested, the_char)
-    let delim_direction = QuoteDirection(the_char)
+    let delim_direction = UnnestedDirection(the_char)
   else
     let delimiter_list = a:pattern["closing-delimitors-list"]
     " Closing delimitors match forward direction
@@ -131,7 +130,7 @@ function! MatchesDirection(pattern, direction, found)
   return a:direction ==# delim_direction "looking backwards
 endfunction
 
-function! QuoteDirection(quote_char)
+function! UnnestedDirection(quote_char)
   return ((QuoteIndex(a:quote_char) % 2) == 0) ? "f" : "b"
 endfunction
 
