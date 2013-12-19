@@ -230,4 +230,4 @@ vnoremap <leader>W :s/ :wip//g<cr>
 
 nnoremap <leader>d mf"dyiwgg/(defn\?\s*d<cr><esc>:nohlsearch<cr>
 
-
+nnoremap <leader>r mob"ayt/gg2w"nyt./:require<cr>:nohlsearch<cr>o[<esc>"npa :as <esc>"apa]<esc>3bea.
