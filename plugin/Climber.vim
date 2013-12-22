@@ -1,6 +1,7 @@
 nnoremap <space> :call StartClimbing()<CR>
 vnoremap <space> :<C-u>call ClimbUp()<CR>
 vnoremap <S-space> :<C-u>call ClimbDown()<CR>
+vnoremap <C-l> :<C-u>call ClimbRight()<CR>
 
 function! Concat(l1, l2)
     let new_list = deepcopy(a:l1)
@@ -45,6 +46,18 @@ function! ClimbDown()
   call Select(l, r)
 endfunction
 
+function! ClimbRight()
+  call Push(g:history, getpos("."))
+
+  let ll = getpos("'<")
+  let lr = getpos("'>")
+  echom "ll is " . string(ll) " and lr is " . string(lr)
+  call setpos(".", lr)
+  call ScanForDelim(InitialPattern(), "f") 
+  let [rl, rr] =  Climb()
+  call Select(ll, rr)
+endfunction
+
 function! Climb()
   let closing = LookFor(InitialPattern(),"f", 0)
   let delim = get(g:all_delimitors, closing)
@@ -60,7 +73,7 @@ function! Climb()
   call LookFor(MatchingDelimitorPattern(delim), "b", 0)
   normal mc
   let left = getpos(".")
-  return [right, left]
+  return [left, right]
 endfunction
 
 function! Select(left, right)
