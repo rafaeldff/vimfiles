@@ -54,7 +54,7 @@ function! ClimbRight()
   call Push(g:history, ll)
 
   call setpos(".", lr)
-  call ScanForDelim(InitialPattern(), "f") 
+  call ScanForDelim(OpeningPattern(), "f") 
   let [rl, rr] =  Climb()
   call Select(ll, rr)
 endfunction
