@@ -24,7 +24,8 @@ endfunction
 function! ClimbUp()
   call Push(g:history, getpos("."))
   execute "normal `>"
-  call Climb()
+  let [l, r] =  Climb()
+  call Select(l, r)
 endfunction
 
 function! ClimbDown()
@@ -40,19 +41,32 @@ function! ClimbDown()
     return
   endif
 
-  call Climb()
+  let [l, r] = Climb()
+  call Select(l, r)
 endfunction
 
 function! Climb()
   let closing = LookFor(InitialPattern(),"f", 0)
   let delim = get(g:all_delimitors, closing)
+  let right = getpos(".")
   normal mo
 
   if closing >= 0
     call LookFor(MatchingDelimitorPattern(delim), "b", 0)
     normal mc
-    execute "normal! `ov`c"
+    let left = getpos(".")
+    return [right, left]
   endif
+
+  let bof = [0,1,1,0]
+  let eof = getpos("$")
+  return [bof, eof]
+endfunction
+
+function! Select(left, right)
+  call setpos("'l", a:left)
+  call setpos(".", a:right)
+  normal v`l
 endfunction
 
 function! InitialPattern()
