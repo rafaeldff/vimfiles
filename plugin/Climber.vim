@@ -11,7 +11,8 @@ function! Concat(l1, l2)
 endfunction
 
 let g:unnested = ['"', "'"]
-let g:climb_delimitors = { ")": "(", "}": "{", '\]': '\[', '"': '"'}
+"let g:climb_delimitors = { ")": "(", "}": "{", '\]': '\[', '"': '"'}
+let g:climb_delimitors = { ")": "(", '\>': '\<', '\]': '\[', '"': '"'}
 let g:opening_delimitors = keys(g:climb_delimitors)
 let g:closing_delimitors = values(g:climb_delimitors)
 let g:all_delimitors = Concat(g:opening_delimitors, g:closing_delimitors)
@@ -55,8 +56,8 @@ function! ClimbRight()
 
   call setpos(".", lr)
   call ScanForDelim(OpeningPattern(), "f") 
-  "let [rl, rr] =  Climb()
-  "call Select(ll, rr)
+  let [rl, rr] =  Climb()
+  call Select(ll, rr)
 endfunction
 
 function! ClimbLeft()
@@ -100,7 +101,7 @@ function! InitialPattern()
 endfunction
 
 function! OpeningPattern()
-  return BuildPattern(Concat(values(g:climb_delimitors), ['\<']), [])
+  return BuildPattern(values(g:climb_delimitors), [])
 endfunction
 
 function! MatchingDelimitorPattern(delimitor)
@@ -141,7 +142,7 @@ function! ScanForDelim(pattern, direction)
   let direction_flag = (a:direction ==# "b") ? "b" : ""
   let flags = direction_flag . "pW"
 
-  echom "Scanning for " . a:pattern["pattern-string"]
+"  echom "Scanning for " . a:pattern["pattern-string"]
   let search_match = search(a:pattern["pattern-string"], flags)
 
 
