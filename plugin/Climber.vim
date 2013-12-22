@@ -55,8 +55,8 @@ function! ClimbRight()
 
   call setpos(".", lr)
   call ScanForDelim(OpeningPattern(), "f") 
-  let [rl, rr] =  Climb()
-  call Select(ll, rr)
+  "let [rl, rr] =  Climb()
+  "call Select(ll, rr)
 endfunction
 
 function! ClimbLeft()
@@ -100,7 +100,7 @@ function! InitialPattern()
 endfunction
 
 function! OpeningPattern()
-  return BuildPattern(values(g:climb_delimitors), [])
+  return BuildPattern(Concat(values(g:climb_delimitors), ['\<']), [])
 endfunction
 
 function! MatchingDelimitorPattern(delimitor)
@@ -141,7 +141,7 @@ function! ScanForDelim(pattern, direction)
   let direction_flag = (a:direction ==# "b") ? "b" : ""
   let flags = direction_flag . "pW"
 
-
+  echom "Scanning for " . a:pattern["pattern-string"]
   let search_match = search(a:pattern["pattern-string"], flags)
 
 
