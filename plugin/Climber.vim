@@ -51,16 +51,16 @@ function! Climb()
   let right = getpos(".")
   normal mo
 
-  if closing >= 0
-    call LookFor(MatchingDelimitorPattern(delim), "b", 0)
-    normal mc
-    let left = getpos(".")
-    return [right, left]
+  if closing < 0
+    let bof = [0,1,1,0]
+    let eof = getpos("$")
+    return [bof, eof]
   endif
 
-  let bof = [0,1,1,0]
-  let eof = getpos("$")
-  return [bof, eof]
+  call LookFor(MatchingDelimitorPattern(delim), "b", 0)
+  normal mc
+  let left = getpos(".")
+  return [right, left]
 endfunction
 
 function! Select(left, right)
