@@ -57,18 +57,18 @@ function! ClimbRight()
   call ScanForDelim(OpeningPattern(), "f") 
 
   normal "cyl
-  echom "Current char " . @c
+"  echom "Current char " . @c
   if (Contains(g:all_delimitors, @c))
-    echom "Expression"
+"    echom "Expression"
     let [rl, rr] =  Climb()
   else
-    echom "Word"
+"    echom "Word"
     let [end_of_word_lnum, end_of_word_col] = searchpos('.\>', "n")
     let rr = [0, end_of_word_lnum, end_of_word_col, 0]
   endif
 
-  echom "LL " . string(ll)
-  echom "RR " . string(rr)
+"  echom "LL " . string(ll)
+"  echom "RR " . string(rr)
   call Select(ll, rr)
 endfunction
 
@@ -154,7 +154,7 @@ function! ScanForDelim(pattern, direction)
   let direction_flag = (a:direction ==# "b") ? "b" : ""
   let flags = direction_flag . "pW"
 
-  echom "Scanning for " . a:pattern["pattern-string"]
+"  echom "Scanning for " . a:pattern["pattern-string"]
   let search_match = search(a:pattern["pattern-string"], flags)
 
 
