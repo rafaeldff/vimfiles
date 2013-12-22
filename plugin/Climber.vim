@@ -2,6 +2,7 @@ nnoremap <space> :call StartClimbing()<CR>
 vnoremap <space> :<C-u>call ClimbUp()<CR>
 vnoremap <S-space> :<C-u>call ClimbDown()<CR>
 vnoremap <C-l> :<C-u>call ClimbRight()<CR>
+vnoremap <C-h> :<C-u>call ClimbLeft()<CR>
 
 function! Concat(l1, l2)
     let new_list = deepcopy(a:l1)
@@ -47,14 +48,26 @@ function! ClimbDown()
 endfunction
 
 function! ClimbRight()
-  call Push(g:history, getpos("."))
-
   let ll = getpos("'<")
   let lr = getpos("'>")
-  echom "ll is " . string(ll) " and lr is " . string(lr)
+
+  call Push(g:history, ll)
+
   call setpos(".", lr)
   call ScanForDelim(InitialPattern(), "f") 
   let [rl, rr] =  Climb()
+  call Select(ll, rr)
+endfunction
+
+function! ClimbLeft()
+  let rl = getpos("'<")
+  let rr = getpos("'>")
+
+  call Push(g:history, rl)
+
+  call setpos(".", rl)
+  call ScanForDelim(OpeningPattern(), "b") 
+  let [ll, lr] =  Climb()
   call Select(ll, rr)
 endfunction
 
@@ -84,6 +97,10 @@ endfunction
 
 function! InitialPattern()
   return BuildPattern(keys(g:climb_delimitors), values(g:climb_delimitors))
+endfunction
+
+function! OpeningPattern()
+  return BuildPattern(values(g:climb_delimitors), [])
 endfunction
 
 function! MatchingDelimitorPattern(delimitor)
