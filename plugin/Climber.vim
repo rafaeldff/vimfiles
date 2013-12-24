@@ -128,7 +128,7 @@ endfunction
 
 function! LookFor(pattern, direction, depth)
   let found = ScanForDelim(a:pattern, a:direction) 
-  if found < 0
+  if NothingFound(found)
     return found
   endif
 
@@ -172,24 +172,40 @@ endfunction
 " When direction is 'f', returns true iff found is a closing delimitor
 " When direction is 'b', returns true iff found is an opening delimitor
 function! MatchesDirection(pattern, direction, found)
-  let the_char = FindChar(a:found, a:pattern)
-
-  if Contains(g:unnested, the_char)
-    let delim_direction = UnnestedDirection(the_char)
+  if IsUnnested(a:found, a:pattern)
+    let delim_direction = UnnestedDirection(a:found, a:pattern)
   else
-    let delimiter_list = a:pattern["closing-delimitors-list"]
     " Closing delimitors match forward direction
     " Opening delimitors match backward direction
-
-    let delim_direction = (a:found < len(delimiter_list) ? "f" : "b" )
+    let delim_direction = (IsClosingDelimiter(a:found, a:pattern) ? "f" : "b" )
   endif
 
   return a:direction ==# delim_direction "looking backwards
 endfunction
 
-function! UnnestedDirection(quote_char)
-  return ((QuoteIndex(a:quote_char) % 2) == 0) ? "f" : "b"
+"==== begin
+function! NothingFound(result)
+  return a:result < 0
 endfunction
+
+function! IsUnnested(result, pattern)
+  let the_char = FindChar(a:result, a:pattern)
+
+  return Contains(g:unnested, the_char)
+endfunction
+
+function! UnnestedDirection(result, pattern)
+  let the_char = FindChar(a:result, a:pattern)
+
+  return ((QuoteIndex(the_char) % 2) == 0) ? "f" : "b"
+endfunction
+
+function! IsClosingDelimiter(result, pattern)
+  let delimiter_list = a:pattern["closing-delimitors-list"]
+
+  return (a:result < len(delimiter_list))
+endfunction
+"==== end
 
 function! QuoteIndex(quote_char)
   let save_cursor = getpos(".")
