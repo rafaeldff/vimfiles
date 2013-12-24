@@ -129,7 +129,7 @@ endfunction
 function! LookFor(pattern, direction, depth)
   let found = ScanForDelim(a:pattern, a:direction) 
   if NothingFound(found)
-    return found
+    return -1
   endif
 
   let matching = MatchesDirection(a:pattern, a:direction, found)
