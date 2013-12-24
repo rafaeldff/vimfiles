@@ -113,14 +113,15 @@ function! InitialPattern()
 endfunction
 
 function! OpeningPattern()
+  "  '\("\)\|\(\[\)\|\((\)\|\({\)\|\(\<\)'
   return BuildPattern(Concat(values(g:climb_delimitors), ['\<']), [])
 endfunction
 
-function! MatchingDelimitorPattern(delimitor)
-  return BuildPattern([a:delimitor], [g:climb_delimitors[a:delimitor]])
-endfunction
-
 function! BuildPattern(closing_delimitors, opening_delimitors)
+  let open_delimitors = '[(\[{]'
+  let close_delimitors = '[)\]}]'
+  let unnested_delimitors = "['\"]"
+
   let all_delimitors = Concat(a:closing_delimitors, a:opening_delimitors)
   let delimitor_pattern = '\(' . join(all_delimitors, '\)\|\(' ) . '\)'
   return {"pattern-string": delimitor_pattern, "closing-delimitors-list": a:closing_delimitors, "pattern-list": all_delimitors}
@@ -142,23 +143,6 @@ function! LookFor(pattern, direction, depth)
   else
     return LookFor(a:pattern, a:direction, a:depth + 1)
   endif
-endfunction
-
-
-" Pattern is actually a map of {"pattern-string": "()", "closing-delimitors-list": []}
-" Direction is either b for backwards or f for forwards
-"
-" Returns index of match (inside pattern-list
-" or a negative number in case of no match.)
-function! ScanForDelim(pattern, direction)
-  let direction_flag = (a:direction ==# "b") ? "b" : ""
-  let flags = direction_flag . "pW"
-
-"  echom "Scanning for " . a:pattern["pattern-string"]
-  let search_match = search(a:pattern["pattern-string"], flags)
-
-
-  return search_match - 2
 endfunction
 
 function! FindChar(idx, pattern)
@@ -184,6 +168,22 @@ function! MatchesDirection(pattern, direction, found)
 endfunction
 
 "==== begin
+" Pattern is actually a map of {"pattern-string": "()", "closing-delimitors-list": []}
+" Direction is either b for backwards or f for forwards
+"
+" Returns index of match (inside pattern-list
+" or a negative number in case of no match.)
+function! ScanForDelim(pattern, direction)
+  let direction_flag = (a:direction ==# "b") ? "b" : ""
+  let flags = direction_flag . "pW"
+
+"  echom "Scanning for " . a:pattern["pattern-string"]
+  let search_match = search(a:pattern["pattern-string"], flags)
+
+
+  return search_match - 2
+endfunction
+
 function! NothingFound(result)
   return a:result < 0
 endfunction
