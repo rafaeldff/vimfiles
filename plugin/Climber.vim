@@ -97,7 +97,7 @@ function! Climb()
     return [bof, eof]
   endif
 
-  call LookFor(MatchingDelimitorPattern(delim), "b", 0)
+  call LookFor(search_pattern, "b", 0)
   normal mc
   let left = getpos(".")
   return [left, right]
