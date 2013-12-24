@@ -87,7 +87,6 @@ endfunction
 function! Climb()
   let search_pattern = InitialPattern()
   let closing = LookFor(search_pattern,"f", 0)
-  let delim = get(g:all_delimitors, closing)
   let right = getpos(".")
   normal mo
 
