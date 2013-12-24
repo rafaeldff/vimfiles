@@ -10,13 +10,11 @@ function! Concat(l1, l2)
     return new_list
 endfunction
 
-let g:unnested = ['"', "'"]
-let g:climb_delimitors = { ")": "(", "}": "{", '\]': '\[', '"': '"'}
-let g:opening_delimitors = keys(g:climb_delimitors)
-let g:closing_delimitors = values(g:climb_delimitors)
-let g:all_delimitors = Concat(g:opening_delimitors, g:closing_delimitors)
-let g:delimitor_pattern = '\(' . join(g:all_delimitors, '\)\|\(' ) . '\)'
 let g:history = []
+
+let g:opening_delimitors = '[(\[{]'
+let g:closing_delimitors = '[)\]}]'
+let g:unnested_delimitors = "['\"]"
 
 function! StartClimbing()
   let g:history = []
@@ -54,21 +52,15 @@ function! ClimbRight()
   call Push(g:history, ll)
 
   call setpos(".", lr)
-  call ScanForDelim(OpeningPattern(), "f") 
+  let next_delimitor = ScanForDelim(OpeningPattern(), "f") 
 
-  normal "cyl
-"  echom "Current char " . @c
-  if (Contains(g:all_delimitors, @c))
-"    echom "Expression"
-    let [rl, rr] =  Climb()
-  else
-"    echom "Word"
+  if IsWordOpening(next_delimitor)
     let [end_of_word_lnum, end_of_word_col] = searchpos('.\>', "n")
     let rr = [0, end_of_word_lnum, end_of_word_col, 0]
+  else
+    let [rl, rr] =  Climb()
   endif
 
-"  echom "LL " . string(ll)
-"  echom "RR " . string(rr)
   call Select(ll, rr)
 endfunction
 
@@ -109,23 +101,20 @@ function! Select(left, right)
 endfunction
 
 function! InitialPattern()
-  return BuildPattern(keys(g:climb_delimitors), values(g:climb_delimitors))
+  let delimitor_pattern = '\(' . g:opening_delimitors . '\)\|\(' . g:closing_delimitors . '\)\|\(' . g:unnested_delimitors . '\)'
+
+  return {"pattern-string": delimitor_pattern}
 endfunction
 
 function! OpeningPattern()
-  "  '\("\)\|\(\[\)\|\((\)\|\({\)\|\(\<\)'
-  return BuildPattern(Concat(values(g:climb_delimitors), ['\<']), [])
-endfunction
-
-function! BuildPattern(closing_delimitors, opening_delimitors)
-  let opening_delimitors = '[(\[{]'
-  let closing_delimitors = '[)\]}]'
-  let unnested_delimitors = "['\"]"
-
-  "let delimitor_pattern = '\(' . opening_delimitors . '\)\|\(' . closing_delimitors . '\)\|\(' . unnested_delimitors '\)'
-  let delimitor_pattern = '\(' . opening_delimitors . '\)\|\(' . closing_delimitors . '\)\|\(' . unnested_delimitors . '\)'
+  let word_opening = '\(\<\)'
+  let delimitor_pattern = '\(' . g:opening_delimitors . '\)\|\(' . g:closing_delimitors . '\)\|\(' . g:unnested_delimitors . '\)\|' . word_opening
 
   return {"pattern-string": delimitor_pattern}
+endfunction
+
+function! IsWordOpening(result)
+  return a:result == 3
 endfunction
 
 function! LookFor(pattern, direction, depth)
