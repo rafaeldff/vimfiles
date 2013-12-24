@@ -85,12 +85,13 @@ function! ClimbLeft()
 endfunction
 
 function! Climb()
-  let closing = LookFor(InitialPattern(),"f", 0)
+  let search_pattern = InitialPattern()
+  let closing = LookFor(search_pattern,"f", 0)
   let delim = get(g:all_delimitors, closing)
   let right = getpos(".")
   normal mo
 
-  if closing < 0
+  if NothingFound(closing)
     let bof = [0,1,1,0]
     let eof = getpos("$")
     return [bof, eof]
@@ -129,7 +130,7 @@ endfunction
 function! LookFor(pattern, direction, depth)
   let found = ScanForDelim(a:pattern, a:direction) 
   if NothingFound(found)
-    return -1
+    return found
   endif
 
   let matching = MatchesDirection(a:pattern, a:direction, found)
