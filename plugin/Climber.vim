@@ -86,11 +86,11 @@ endfunction
 
 function! Climb()
   let search_pattern = InitialPattern()
-  let closing = LookFor(search_pattern,"f", 0)
+  let search_result = LookFor(search_pattern,"f", 0)
   let right = getpos(".")
   normal mo
 
-  if NothingFound(closing)
+  if NothingFound(search_result)
     let bof = [0,1,1,0]
     let eof = getpos("$")
     return [bof, eof]
