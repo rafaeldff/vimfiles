@@ -118,13 +118,14 @@ function! OpeningPattern()
 endfunction
 
 function! BuildPattern(closing_delimitors, opening_delimitors)
-  let open_delimitors = '[(\[{]'
-  let close_delimitors = '[)\]}]'
+  let opening_delimitors = '[(\[{]'
+  let closing_delimitors = '[)\]}]'
   let unnested_delimitors = "['\"]"
 
-  let all_delimitors = Concat(a:closing_delimitors, a:opening_delimitors)
-  let delimitor_pattern = '\(' . join(all_delimitors, '\)\|\(' ) . '\)'
-  return {"pattern-string": delimitor_pattern, "closing-delimitors-list": a:closing_delimitors, "pattern-list": all_delimitors}
+  "let delimitor_pattern = '\(' . opening_delimitors . '\)\|\(' . closing_delimitors . '\)\|\(' . unnested_delimitors '\)'
+  let delimitor_pattern = '\(' . opening_delimitors . '\)\|\(' . closing_delimitors . '\)\|\(' . unnested_delimitors . '\)'
+
+  return {"pattern-string": delimitor_pattern}
 endfunction
 
 function! LookFor(pattern, direction, depth)
@@ -189,21 +190,18 @@ function! NothingFound(result)
 endfunction
 
 function! IsUnnested(result, pattern)
-  let the_char = FindChar(a:result, a:pattern)
-
-  return Contains(g:unnested, the_char)
+  return a:result == 2 " Quotes are the third element in the pattern
 endfunction
 
 function! UnnestedDirection(result, pattern)
-  let the_char = FindChar(a:result, a:pattern)
+  normal "cyl
+  let the_char = @c
 
   return ((QuoteIndex(the_char) % 2) == 0) ? "f" : "b"
 endfunction
 
 function! IsClosingDelimiter(result, pattern)
-  let delimiter_list = a:pattern["closing-delimitors-list"]
-
-  return (a:result < len(delimiter_list))
+  return a:result == 1 " Closing delimitors are the second element in the pattern
 endfunction
 "==== end
 
