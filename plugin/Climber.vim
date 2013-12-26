@@ -1,6 +1,8 @@
 nnoremap <space> :call StartClimbing()<CR>
 vnoremap <space> :<C-u>call ClimbUp()<CR>
 vnoremap <S-space> :<C-u>call ClimbDown()<CR>
+vnoremap <C-k> :<C-u>call ClimbUp()<CR>
+vnoremap <C-j> :<C-u>call ClimbDown()<CR>
 vnoremap <C-l> :<C-u>call ClimbRight()<CR>
 vnoremap <C-h> :<C-u>call ClimbLeft()<CR>
 
