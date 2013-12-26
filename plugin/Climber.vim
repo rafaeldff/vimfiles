@@ -53,6 +53,9 @@ function! ClimbRight()
 
   call setpos(".", lr)
   let next_delimitor = ScanForDelim(OpeningPattern(), "f") 
+  if NotMatching(next_delimitor)
+    return
+  endif
 
   if IsWordDelim(next_delimitor)
     let [end_of_word_lnum, end_of_word_col] = searchpos('.\>', "n")
@@ -72,6 +75,10 @@ function! ClimbLeft()
 
   call setpos(".", rl)
   let next_delimitor = ScanForDelim(ClosingPattern(), "b") 
+  if NotMatching(next_delimitor)
+    return
+  endif
+
   if IsWordDelim(next_delimitor) "TODO: rename
     let [begin_of_word_lnum, begin_of_word_col] = searchpos('\<.', "nb")
     let ll = [0, begin_of_word_lnum, begin_of_word_col, 0]
@@ -115,20 +122,24 @@ endfunction
 " ========= Auxiliar functions for ClimbLeft and ClimbRight
 function! OpeningPattern()
   let word_opening = '\(\<\)'
-  let delimitor_pattern = '\(' . g:opening_delimitors . '\)\|\(' . g:unnested_delimitors . '\)\|' . word_opening
+  let delimitor_pattern = '\(' . g:closing_delimitors . '\)\|\(' . g:opening_delimitors . '\)\|\(' . g:unnested_delimitors . '\)\|' . word_opening
 
   return {"pattern-string": delimitor_pattern}
 endfunction
 
 function! ClosingPattern()
   let word_closing = '\(\>\)'
-  let delimitor_pattern = '\(' . g:closing_delimitors . '\)\|\(' . g:unnested_delimitors . '\)\|' . word_closing
+  let delimitor_pattern = '\(' . g:opening_delimitors . '\)\|\(' .  g:closing_delimitors . '\)\|\(' . g:unnested_delimitors . '\)\|' . word_closing
 
   return {"pattern-string": delimitor_pattern}
 endfunction
 
 function! IsWordDelim(result)
-  return a:result == 2 " Last element in the regex for Opening and Closing
+  return a:result == 3 " Last element in the regex for Opening and Closing
+endfunction
+
+function! NotMatching(result)
+  return a:result <= 0 
 endfunction
 " ========= Auxiliar functions for ClimbLeft and ClimbRight
 
