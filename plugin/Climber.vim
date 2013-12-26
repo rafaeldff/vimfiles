@@ -49,13 +49,14 @@ function! ClimbRight()
   let ll = getpos("'<")
   let lr = getpos("'>")
 
-  call Push(g:history, ll)
-
   call setpos(".", lr)
   let next_delimitor = ScanForDelim(OpeningPattern(), "f") 
   if NotMatching(next_delimitor)
+    call Select(ll, lr)
     return
   endif
+
+  call Push(g:history, ll)
 
   if IsWordDelim(next_delimitor)
     let [end_of_word_lnum, end_of_word_col] = searchpos('.\>', "n")
@@ -71,13 +72,14 @@ function! ClimbLeft()
   let rl = getpos("'<")
   let rr = getpos("'>")
 
-  call Push(g:history, rl)
-
   call setpos(".", rl)
   let next_delimitor = ScanForDelim(ClosingPattern(), "b") 
   if NotMatching(next_delimitor)
+    call Select(rl, rr)
     return
   endif
+
+  call Push(g:history, rl)
 
   if IsWordDelim(next_delimitor) "TODO: rename
     let [begin_of_word_lnum, begin_of_word_col] = searchpos('\<.', "nb")
