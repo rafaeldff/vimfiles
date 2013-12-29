@@ -231,3 +231,13 @@ vnoremap <leader>W :s/ :wip//g<cr>
 nnoremap <leader>d mf"dyiwgg/(defn\?\s*d<cr><esc>:nohlsearch<cr>
 
 nnoremap <leader>r mob"ayt/gg2w"nyt./:require<cr>:nohlsearch<cr>o[<esc>"npa :as <esc>"apa]<esc>3bea.
+
+function! OpenTest()
+  let file_path = @%
+  "let file_name = strpart(file_path, strridx(file_path, "/") + 1)
+  let test_file_path_suffixed = substitute(file_path, "\.clj", "_test.clj", "")
+  let test_file_path = substitute(test_file_path_suffixed, "src/", "test/", "")
+  echom "Opening " . test_file_path
+  execute "normal! :topleft vs " . test_file_path . "\<cr>"
+endfunction
+nnoremap <leader>t :call OpenTest()<cr>
