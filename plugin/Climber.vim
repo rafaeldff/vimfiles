@@ -16,7 +16,7 @@ let g:history = []
 
 let g:opening_delimitors = '[(\[{]'
 let g:closing_delimitors = '[)\]}]'
-let g:unnested_delimitors = "['\"]"
+let g:unnested_delimitors = "[\"]"
 
 function! StartClimbing()
   let g:history = []
