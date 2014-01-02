@@ -241,3 +241,6 @@ function! OpenTest()
   execute "normal! :topleft vs " . test_file_path . "\<cr>"
 endfunction
 nnoremap <leader>t :call OpenTest()<cr>
+
+nnoremap <leader>bl :%s/"bookmarks"/"remote_bookmarks"/<cr>:%s/"local_bookmarks"/"bookmarks"/<cr>
+nnoremap <leader>br :%s/"bookmarks"/"local_bookmarks"/<cr>:%s/"remote_bookmarks"/"bookmarks"/<cr>
