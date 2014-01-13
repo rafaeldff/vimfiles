@@ -244,3 +244,5 @@ nnoremap <leader>t :call OpenTest()<cr>
 
 nnoremap <leader>bl :%s/"bookmarks"/"remote_bookmarks"/<cr>:%s/"local_bookmarks"/"bookmarks"/<cr>
 nnoremap <leader>br :%s/"bookmarks"/"local_bookmarks"/<cr>:%s/"remote_bookmarks"/"bookmarks"/<cr>
+
+nnoremap <leader>jt mob"ayt/gg/:as a<cr>:nohlsearch<cr>T["nyt `o:execute "normal! :tabnew src/" . substitute(substitute("n", '-', '_', 'g'), '\.', '/', 'g') . ".clj\<lt>cr>"<cr>
