@@ -242,6 +242,17 @@ function! OpenTest()
 endfunction
 nnoremap <leader>t :call OpenTest()<cr>
 
+
+function! OpenSource()
+  let file_path = @%
+  "let file_name = strpart(file_path, strridx(file_path, "/") + 1)
+  let src_file_path_suffixed = substitute(file_path, "_test.clj", ".clj", "")
+  let src_file_path = substitute(src_file_path_suffixed, "test/", "src/", "")
+  echom "Opening " . src_file_path
+  execute "normal! :botright vs " . src_file_path . "\<cr>"
+endfunction
+nnoremap <leader>s :call OpenSource()<cr>
+
 nnoremap <leader>bl :%s/"bookmarks"/"remote_bookmarks"/<cr>:%s/"local_bookmarks"/"bookmarks"/<cr>
 nnoremap <leader>br :%s/"bookmarks"/"local_bookmarks"/<cr>:%s/"remote_bookmarks"/"bookmarks"/<cr>
 
