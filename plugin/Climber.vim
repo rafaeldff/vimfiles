@@ -213,8 +213,10 @@ function! IsUnnested(result, pattern)
 endfunction
 
 function! UnnestedDirection(result, pattern)
+  let saved_unnamed_register = @"
   normal "cyl
   let the_char = @c
+  let @" = saved_unnamed_register
 
   return ((QuoteIndex(the_char) % 2) == 0) ? "f" : "b"
 endfunction
