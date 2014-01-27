@@ -256,7 +256,11 @@ nnoremap <leader>s :call OpenSource()<cr>
 nnoremap <leader>bl :%s/"bookmarks"/"remote_bookmarks"/<cr>:%s/"local_bookmarks"/"bookmarks"/<cr>
 nnoremap <leader>br :%s/"bookmarks"/"local_bookmarks"/<cr>:%s/"remote_bookmarks"/"bookmarks"/<cr>
 
-nnoremap <leader>jt mob"ayt/f/l"dyegg/:as a<cr>:nohlsearch<cr>T["nyt `o:execute "normal! :tabnew src/" . substitute(substitute("n", '-', '_', 'g'), '\.', '/', 'g') . ".clj\<lt>cr>"<cr>/d<cr>
-
 
 vnoremap m y`<v`>
+
+nnoremap <leader>jt mob"ayt/f/l"dyegg/:as a\><cr>:nohlsearch<cr>T["nyt `o:execute "normal! :tabnew src/" . substitute(substitute("n", '-', '_', 'g'), '\.', '/', 'g') . ".clj\<lt>cr>"<cr>/d<cr>
+
+nnoremap <leader>jr mob"ayt/f/l"dyegg/:as a\><cr>:nohlsearch<cr>0f[
+
+nnoremap <leader>d bi...<esc>ea...<esc>
