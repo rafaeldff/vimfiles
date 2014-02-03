@@ -209,7 +209,7 @@ if !exists(":DiffOrig")
 		  \ | wincmd p | diffthis
 endif
 
-set maxfuncdepth=2048 
+set maxfuncdepth=16384
 
 function! JumpToDir(dest)
   execute "cd  ~/.marks/" . a:dest
