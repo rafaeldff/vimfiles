@@ -30,7 +30,7 @@ set linespace=4
 set visualbell t_vb=
 
 "turn off needless toolbar and scrollbars on gvim/mvim
-set guioptions-=M
+set guioptions-=m
 set guioptions-=r
 set guioptions-=l
 set guioptions-=L
