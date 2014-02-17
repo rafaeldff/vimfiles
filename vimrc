@@ -212,7 +212,7 @@ endif
 set maxfuncdepth=16384
 
 function! JumpToDir(dest)
-  execute "cd  ~/.marks/" . a:dest
+  execute "lcd  ~/.marks/" . a:dest
   pwd
 endfunction
 
