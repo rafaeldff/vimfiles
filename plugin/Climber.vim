@@ -148,21 +148,29 @@ endfunction
 " ========= Auxiliar functions for ClimbLeft and ClimbRight
 
 function! LookFor(pattern, direction, depth)
-  let found = ScanForDelim(a:pattern, a:direction) 
-  if NothingFound(found)
-    return found
-  endif
+  let continuing = 1 "true
+  let depth = a:depth
+  let found = -1
 
-  let matching = MatchesDirection(a:pattern, a:direction, found)
-  if matching
-    if a:depth == 0
-      return found
+  while continuing
+    let found = ScanForDelim(a:pattern, a:direction) 
+    if NothingFound(found)
+      let continuing = 0 "false
     else
-      return LookFor(a:pattern, a:direction, a:depth - 1)
+      let matching = MatchesDirection(a:pattern, a:direction, found)
+      if matching
+        if depth == 0
+          let continuing = 0 "false
+        else
+          let depth = depth - 1
+        endif
+      else
+        let depth = depth + 1
+      endif
     endif
-  else
-    return LookFor(a:pattern, a:direction, a:depth + 1)
-  endif
+  endwhile
+
+  return found
 endfunction
 
 function! FindChar(idx, pattern)
