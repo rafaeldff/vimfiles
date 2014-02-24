@@ -264,3 +264,6 @@ nnoremap <leader>jt mob"ayt/f/l"dyegg/:as a\><cr>:nohlsearch<cr>T["nyt `o:execu
 nnoremap <leader>jr mob"ayt/f/l"dyegg/:as a\><cr>:nohlsearch<cr>0f[
 
 nnoremap <leader>d bi...<esc>ea...<esc>
+
+:nnoremap <leader>stime :%s/#<LocalDateTime \(\d\{4\}\)-\(\d\{1,2\}\)-\(\d\{1,2\}\)T\(\d\{1,2\}\):\(\d\{1,2\}\)>/(time\/date-time \1 \2 \3 \4 \5 0)/g<cr>
+
