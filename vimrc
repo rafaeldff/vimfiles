@@ -261,6 +261,10 @@ vnoremap m y`<v`>
 
 nnoremap <leader>jt mob"ayt/f/l"dyegg/:as a\><cr>:nohlsearch<cr>T["nyt `o:execute "normal! :tabnew src/" . substitute(substitute("n", '-', '_', 'g'), '\.', '/', 'g') . ".clj\<lt>cr>"<cr>/d<cr>
 
+nnoremap <leader>jv mob"ayt/f/l"dyegg/:as a\><cr>:nohlsearch<cr>T["nyt `o:execute "normal! :botright vsplit src/" . substitute(substitute("n", '-', '_', 'g'), '\.', '/', 'g') . ".clj\<lt>cr>"<cr>/d<cr>
+
+nnoremap <leader>jj mob"ayt/f/l"dyegg/:as a\><cr>:nohlsearch<cr>T["nyt `o:execute "normal! :e src/" . substitute(substitute("n", '-', '_', 'g'), '\.', '/', 'g') . ".clj\<lt>cr>"<cr>/d<cr>
+
 nnoremap <leader>jr mob"ayt/f/l"dyegg/:as a\><cr>:nohlsearch<cr>0f[
 
 nnoremap <leader>d bi...<esc>ea...<esc>
