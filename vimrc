@@ -114,9 +114,9 @@ if has("gui_running")
     "set lines=40
     "set columns=115
 
+    set guifont=Consolas\ for\ Powerline\ 18
     if has("gui_gnome")
         set term=gnome-256color
-        set guifont=Consolas\ for\ Powerline\ 11
     endif
 else
     "dont load csapprox if there is no gui support - silences an annoying warning
@@ -272,3 +272,14 @@ nnoremap <leader>d bi...<esc>ea...<esc>
 :nnoremap <leader>stime :%s/#<LocalDateTime \(\d\{4\}\)-\(\d\{1,2\}\)-\(\d\{1,2\}\)T\(\d\{1,2\}\):\(\d\{1,2\}\)>/(time\/date-time \1 \2 \3 \4 \5 0)/g<cr>
 :nnoremap <leader>sdate :%s/#<LocalDate \(\d\{4\}\)-\(\d\{1,2\}\)-\(\d\{1,2\}\)/(time\/date-time \1 \2 \3)/g<cr>
 
+function! IncFont() 
+  set guifont=Consolas\ for\ Powerline\ 18
+endfunction
+
+function! DecFont()
+  set guifont=Consolas\ for\ Powerline\ 12
+endfunction
+
+nnoremap <leader>= :call IncFont()<cr>
+
+nnoremap <leader>- :call DecFont()<cr>
