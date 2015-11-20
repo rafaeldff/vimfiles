@@ -273,13 +273,19 @@ nnoremap <leader>d bi...<esc>ea...<esc>
 :nnoremap <leader>sdate :%s/#<LocalDate \(\d\{4\}\)-\(\d\{1,2\}\)-\(\d\{1,2\}\)/(time\/date-time \1 \2 \3)/g<cr>
 
 function! IncFont() 
-  set guifont=Consolas\ for\ Powerline\ 18
+  set guifont=Consolas\ for\ Powerline\ 20
 endfunction
 
 function! DecFont()
-  set guifont=Consolas\ for\ Powerline\ 12
+  set guifont=Consolas\ for\ Powerline\ 11
 endfunction
 
 nnoremap <leader>= :call IncFont()<cr>
 
 nnoremap <leader>- :call DecFont()<cr>
+
+" <leader>u mapped to generate uuid
+nnoremap <leader>u mt:r !uuidgen<cr>diW`tpjdd`te
+
+" ctrl-o same as ctrl-p
+nnoremap <C-o> :<C-u>CtrlP<cr>
