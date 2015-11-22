@@ -277,7 +277,7 @@ function! IncFont()
 endfunction
 
 function! DecFont()
-  set guifont=Consolas\ for\ Powerline\ 11
+  set guifont=Consolas\ for\ Powerline\ 8
 endfunction
 
 nnoremap <leader>= :call IncFont()<cr>
