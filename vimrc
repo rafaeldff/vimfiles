@@ -114,7 +114,7 @@ if has("gui_running")
     "set lines=40
     "set columns=115
 
-    set guifont=Consolas\ for\ Powerline\ 18
+    set guifont=Consolas\ for\ Powerline\ 12
     if has("gui_gnome")
         set term=gnome-256color
     endif
@@ -273,7 +273,7 @@ nnoremap <leader>d bi...<esc>ea...<esc>
 :nnoremap <leader>sdate :%s/#<LocalDate \(\d\{4\}\)-\(\d\{1,2\}\)-\(\d\{1,2\}\)/(time\/date-time \1 \2 \3)/g<cr>
 
 function! IncFont() 
-  set guifont=Consolas\ for\ Powerline\ 20
+  set guifont=Consolas\ for\ Powerline\ 12
 endfunction
 
 function! DecFont()
