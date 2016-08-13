@@ -273,11 +273,11 @@ nnoremap <leader>d bi...<esc>ea...<esc>
 :nnoremap <leader>sdate :%s/#<LocalDate \(\d\{4\}\)-\(\d\{1,2\}\)-\(\d\{1,2\}\)/(time\/date-time \1 \2 \3)/g<cr>
 
 function! IncFont() 
-  set guifont=Consolas\ for\ Powerline\ 12
+  set guifont=Consolas\ for\ Powerline\ 25
 endfunction
 
 function! DecFont()
-  set guifont=Consolas\ for\ Powerline\ 8
+  set guifont=Consolas\ for\ Powerline\ 12
 endfunction
 
 nnoremap <leader>= :call IncFont()<cr>
