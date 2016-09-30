@@ -122,10 +122,6 @@
 	ignore = untracked
 	path = bundle/grails-vim
 	url = git://github.com/felipero/grails-vim.git
-[submodule "bundle/clojure"]
-	ignore = untracked
-	path = bundle/clojure
-	url = git://github.com/vim-scripts/VimClojure.git
 [submodule "bundle/fsharp"]
 	ignore = untracked
 	path = bundle/fsharp
