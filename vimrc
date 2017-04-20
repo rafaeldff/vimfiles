@@ -26,6 +26,10 @@ set wrap linebreak nolist
 "add some line space for easy reading
 set linespace=4
 
+" setup swap and backup dir
+set backupdir=~/.vim/backup//
+set directory=~/.vim/swp//
+
 "disable visual bell
 set visualbell t_vb=
 
@@ -289,3 +293,5 @@ nnoremap <leader>u mt:r !uuidgen<cr>diW`tpjdd`te
 
 " ctrl-o same as ctrl-p
 nnoremap <C-o> :<C-u>CtrlP<cr>
+
+
