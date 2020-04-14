@@ -294,4 +294,5 @@ nnoremap <leader>u mt:r !uuidgen<cr>diW`tpjdd`te
 " ctrl-o same as ctrl-p
 nnoremap <C-o> :<C-u>CtrlP<cr>
 
+set laststatus=2
 
